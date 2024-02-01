@@ -16,9 +16,10 @@
         <div class="relative" v-if="isEdit">
           <input class="editable-task" 
             type="text" 
-            @keyup.esc="$event => isEdit = false" 
             v-focus
+            @keyup.esc="undo" 
             @keyup.enter="updateTask"
+            v-model="editingTask"
           />
         </div>
         <span v-else="">{{ task.name }}</span>
@@ -41,6 +42,7 @@ const emit = defineEmits(['updated'])
 
 // 定義反應變數
 const isEdit = ref(false);
+const editingTask = ref(props.task.name)
 
 // 邏輯作為計算屬性放在腳本
 const completedClass = computed(() =>
@@ -55,5 +57,10 @@ const updateTask = event => {
   const updatedTask = { ...props.task, name: event.target.value }
   isEdit.value = false
   emit('updated', updatedTask)
+}
+
+const undo = () => {
+  isEdit.value = false
+  editingTask.value = props.task.name
 }
 </script>
