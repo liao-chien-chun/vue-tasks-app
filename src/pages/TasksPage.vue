@@ -40,9 +40,20 @@
 <script setup>
   // 匯入 hook
   import { onMounted, ref, computed } from "vue";
+  import { storeToRefs } from "pinia";
+  import { useTaskStore } from "../stores/task";
   import { allTasks, createTask, updateTask, completeTask, removeTask } from "../http/task-api";
   import Tasks from "../components/tasks/Tasks.vue"
   import NewTask from "../components/tasks/NewTask.vue"
+
+  const store = useTaskStore()
+  const { completedTasks, uncompletedTasks } = storeToRefs(store)
+  // store.$patch({
+  //   task: {
+  //     name: "First task updated using $patch",
+  //     is_completed: true
+  //   }
+  // })
 
   // 建立一個保存任務的變數
   const tasks = ref([])
@@ -57,8 +68,6 @@
 
   // 定義兩個計算屬性 computed
   // 完成的任務回傳回 false
-  const uncompletedTasks = computed(() => tasks.value.filter(task => !task.is_completed))
-  const completedTasks = computed(() => tasks.value.filter(task => task.is_completed))
   const showToggleCompletedBtn = computed(
     () => uncompletedTasks.value.length > 0 && completedTasks.value.length > 0
   )
