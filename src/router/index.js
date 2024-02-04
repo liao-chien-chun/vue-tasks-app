@@ -5,5 +5,6 @@ export default createRouter({
   // routes: routes,
   // 也可簡化成
   routes,
-  history: createWebHistory()
+  history: createWebHistory(),
+  // linkActiveClass: 'active'
 });
