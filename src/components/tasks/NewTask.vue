@@ -11,6 +11,13 @@
 
 <script setup>
 import { reactive } from 'vue';
+import { useTaskStore } from "../../stores/task";
+
+// 實例化商店
+const store = useTaskStore()
+// 從商店中解構
+const { handleAddedTask } = store
+
 
   // 使用反應函數
   const newTask = reactive({
@@ -18,13 +25,12 @@ import { reactive } from 'vue';
     is_completed: false
   })
 
-  const emit = defineEmits(['added'])
 
-  const addNewTask = event => {
+  const addNewTask = async(event) => {
     if (event.target.value.trim()) {
       newTask.name = event.target.value
       event.target.value = ''
-      emit('added', newTask)
+      await handleAddedTask(newTask)
     }
   }
 </script>
