@@ -12,11 +12,17 @@ const routes = [
     component: TasksPage,
     // 也可以使用 name 屬性來命名該路線
     name: "tasks",
+    meta: {
+      auth: true,
+    },
   },
   {
     path: "/summary",
     component: SummaryPage,
     name: "summary",
+    meta: {
+      auth: true,
+    },
   },
   {
     path: "/login",
@@ -30,9 +36,9 @@ const routes = [
   },
   {
     path: "/:notFound(.*)",
-    name: 'error.404',
-    component: NotFoundErrorPage
-  }
+    name: "error.404",
+    component: NotFoundErrorPage,
+  },
 ];
 
 // 導出他讓其他文件可用
