@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { allTasks } from "../http/task-api";
 
 // 此函數接收兩個參數
 // 第一個參數是唯一名稱
@@ -6,18 +7,7 @@ import { defineStore } from "pinia";
 // 或者我們也可以傳遞一個定義反應式屬性和方法的函數
 export const useTaskStore = defineStore("taskStore", {
   state: () => ({
-    tasks: [
-      {
-        id: 1,
-        name: "First task",
-        is_completed: false,
-      },
-      {
-        id: 2,
-        name: "Second task",
-        is_completed: true,
-      },
-    ],
+    tasks: [],
     task: {
       id: 1,
       name: "First task",
@@ -31,4 +21,13 @@ export const useTaskStore = defineStore("taskStore", {
       return this.tasks.filter((task) => !task.is_completed);
     },
   },
+
+  actions: {
+    async fetchAllTasks () {
+      // 對 API 回應中的資料進行解構
+      const { data } = await allTasks()
+      // // 任務變數是反應性物件
+      this.tasks = data.data
+    }
+  }
 });

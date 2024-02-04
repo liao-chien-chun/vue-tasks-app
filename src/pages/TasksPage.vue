@@ -48,22 +48,14 @@
 
   const store = useTaskStore()
   const { completedTasks, uncompletedTasks } = storeToRefs(store)
-  // store.$patch({
-  //   task: {
-  //     name: "First task updated using $patch",
-  //     is_completed: true
-  //   }
-  // })
+  const { fetchAllTasks } = store
 
   // 建立一個保存任務的變數
   const tasks = ref([])
 
-  // 呼叫
+  // 呼叫，鉤子
   onMounted(async () => {
-    // 對 API 回應中的資料進行解構
-    const { data } = await allTasks()
-    // 任務變數是反應性物件
-    tasks.value = data.data
+    await fetchAllTasks()
   })
 
   // 定義兩個計算屬性 computed
