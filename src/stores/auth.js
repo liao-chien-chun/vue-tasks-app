@@ -6,6 +6,7 @@ import { csrfCookie, login, register, logout, getUser } from "../http/auth-api";
 // 第一個參數指定商店名稱
 export const useAuthStore = defineStore("authStore", () => {
   const user = ref(null);
+  const errors = ref({}) // v-if="errors.email"
 
   // 定義計算或 getter
   const isLoggedIn = computed(() => !!user.value);
@@ -22,8 +23,15 @@ export const useAuthStore = defineStore("authStore", () => {
   const handleLogin = async (credentials) => {
     // 初始化程式應用的 csrf 保護
     await csrfCookie();
-    await login(credentials);
-    await fetchUser();
+    try {
+      await login(credentials);
+      await fetchUser();
+      errors.value = {}
+    } catch (error) {
+      if (error.response && error.response.status === 422) {
+        errors.value = error.response.data.errors
+      }
+    }
   };
 
   const handleRegister = async (newUser) => {
@@ -42,6 +50,7 @@ export const useAuthStore = defineStore("authStore", () => {
   // 指定我們要公開的狀態取的器和操作
   return {
     user,
+    errors,
     isLoggedIn,
     fetchUser,
     handleLogin,
