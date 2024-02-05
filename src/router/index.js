@@ -12,8 +12,9 @@ const router =  createRouter({
 
 // 全域
 // to  目標位置, from 當前位置
-router.beforeEach((to, from) => {
+router.beforeEach(async(to, from) => {
   const store = useAuthStore()
+  await store.fetchUser()
 
   if (to.meta.auth && !store.isLoggedIn) {
     return { 
@@ -23,7 +24,9 @@ router.beforeEach((to, from) => {
         redirect: to.fullPath
       }
     };
-  }  
+  } else if (to.meta.guest && store.isLoggedIn) {
+    return { meta: 'tasks' }
+  }
 })
 
 
